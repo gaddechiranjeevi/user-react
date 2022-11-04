@@ -8,6 +8,7 @@ import classes from './AddUser.module.css';
 const AddUser = (props) => {
   const [enteredUsername, setEnteredUsername] = useState('');
   const [enteredAge, setEnteredAge] = useState('');
+  const [enteredCollegeName, setEnteredCollegeName] = useState('');
   const [error, setError] = useState();
 
   const addUserHandler = (event) => {
@@ -26,9 +27,17 @@ const AddUser = (props) => {
       });
       return;
     }
-    props.onAddUser(enteredUsername, enteredAge);
+    if (+enteredCollegeName<1){
+      setError({
+        title: 'Enter College name',
+        message: 'Please enter College name.',
+      });
+      return;
+    }
+    props.onAddUser(enteredUsername, enteredAge, enteredCollegeName);
     setEnteredUsername('');
     setEnteredAge('');
+    setEnteredCollegeName('');
   };
 
   const usernameChangeHandler = (event) => {
@@ -39,13 +48,17 @@ const AddUser = (props) => {
     setEnteredAge(event.target.value);
   };
 
+  const CollegeNameChangedHandler = (event) => {
+    setEnteredCollegeName(event.target.value);
+  };
+  
   const errorHandler = () => {
     setError(null);
   };
 
   return (
     <div>
-      {error && (
+       {error && (
         <ErrorModal
           title={error.title}
           message={error.message}
@@ -67,6 +80,13 @@ const AddUser = (props) => {
             type="number"
             value={enteredAge}
             onChange={ageChangeHandler}
+          />
+          <label htmlFor="collegename">CollegeName</label>
+          <input
+            id="collegename"
+            type="text"
+            value={enteredCollegeName}
+            onChange={CollegeNameChangedHandler}
           />
           <Button type="submit">Add User</Button>
         </form>
